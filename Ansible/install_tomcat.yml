@@ -1,15 +1,15 @@
 ---
 - hosts: all
+  become: yes
   tasks:
-    - name: Task -1 update Apt package manager repositories cache
-      become: false
-      apt:
-        update_cache: yes
-    - name: Task  -2 install Java using Ansible
-      become: yes
-      apt:
-        name: "{{ packages }}"
-        state: present
-      vars:
-        packages:
-          - openjdk-11-jdk
+    - name: Downloading tomcat server from Apache-tomcat Server
+      get_url:
+        url: https://www.makeuseof.com/a-step-by-step-guide-to-installing-apache-tomcat-linux/
+        dest: /Downloads/Server
+    - name: extract the tomcat server
+      unarchive:
+        src: /Downloads/Server/apache-tomcat-9.0.45.tar.gz
+        dest: /Downloads/Server
+        remote_src: yes
+    - name: start tomcat server
+      shell: /Downloads/Server/apache-tomcat-9.0.52/bin/startup.sh

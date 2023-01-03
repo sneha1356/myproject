@@ -100,7 +100,7 @@ class Login_Page():
         window.title("Hcl Emp System")
         # frame=Frame(window,width=200,height=200)
         # frame.pack()
-        # bgimg=tk.PhotoImage(file="/home/siri/Documents/project/index1.png")
+        # bgimg=tk.PhotoImage(file="/home/siri/Documents/Login project/index1.png")
         # img=bgimg.resize((450,350))
         # limg=Label(window,i=bgimg)
         # limg.pack()

@@ -1,0 +1,15 @@
+---
+- hosts: all
+  tasks:
+    - name: Task -1 update Apt package manager repositories cache
+      become: false
+      apt:
+        update_cache: yes
+    - name: Task  -2 install Java using Ansible
+      become: yes
+      apt:
+        name: "{{ packages }}"
+        state: present
+      vars:
+        packages:
+          - openjdk-11-jdk
