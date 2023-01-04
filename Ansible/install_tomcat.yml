@@ -4,12 +4,12 @@
   tasks:
     - name: Downloading tomcat server from Apache-tomcat Server
       get_url:
-        url: https://www.makeuseof.com/a-step-by-step-guide-to-installing-apache-tomcat-linux/
-        dest: /Downloads/Server
+        url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.70/bin/apache-tomcat-9.0.70.tar.gz
+        dest: /etc/download_tom
     - name: extract the tomcat server
       unarchive:
-        src: /Downloads/Server/apache-tomcat-9.0.45.tar.gz
-        dest: /Downloads/Server
+        src: /etc/download_tom/apache-tomcat-9.0.70.tar.gz
+        dest: /etc/tom_server
         remote_src: yes
     - name: start tomcat server
-      shell: /Downloads/Server/apache-tomcat-9.0.52/bin/startup.sh
+      shell: /etc/tom_server/apache-tomcat-9.0.70/bin/startup.sh
