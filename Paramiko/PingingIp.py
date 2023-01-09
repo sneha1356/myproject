@@ -7,8 +7,18 @@ ip=input("Enter ip address")
 number=int(input("Enter Number of packets:"))
 command=f'ping -c {number} {ip}'
 stdin,stdout,stderr,=ssh.exec_command(command)
-df=pd.DataFrame(stdout)
-print(df)
-#print(stdout.readlines())
-#print(df.columns)
+# df=pd.DataFrame(stdout)
+# print
+flag=False
+for i in stdout.readlines():
+    if "ttl" not in i:
+        print(i)
+        flag=True
+    else:
+        flag=False
+if flag==True:
+    print("host reached")
+else:
+    print("host unreachable")
+# print(df.columns)
 # df.to_excel('df.xlsx')

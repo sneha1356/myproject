@@ -13,10 +13,8 @@ class Mysql_Connector():
         self.cur.execute(self.sql,val)
         data=self.cur.fetchone()
         if data!=None:
-            self.cur.close()
             return True
         else:
-            self.cur.close()
             return False
     def insert_db(self,username,password):
         self.username=username
@@ -28,7 +26,6 @@ class Mysql_Connector():
         self.con.commit()
     def search(self,user1):
         try:
-
             self.cur=self.con.cursor()
             self.sql="select * from login where id=%s"
             val1=(user1,)

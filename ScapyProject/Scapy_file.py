@@ -1,56 +1,48 @@
-from scapy.all import *
-import socket
-import datetime
-import os
-import time
+from threading import Thread
+from netmiko import ConnectHandler
+import psutil
+class Router_Packet_details:
+
+    def get_packet_details():
+        router = {
+
+            "device_type": "cisco_ios",
+
+            "ip": "sandbox-iosxe-latest-1.cisco.com",
+
+            "username": "developer",
+
+            "password": "C1sco12345"
+
+        }
+
+        net_connect = ConnectHandler(**router)
+
+        network_stats = psutil.net_io_counters(pernic=False, nowrap=True)
+
+        print(network_stats)
+
+        bytes_sent = getattr(network_stats, 'bytes_sent')
+
+        bytes_recv = getattr(network_stats, 'bytes_recv')
+
+        print("Bytes Sent = {0} | Bytes Received = {1}".format(bytes_sent, bytes_recv))
+
+        net_connect.disconnect()
 
 
-def network_monitoring_for_visualization_version(pkt):
-    time = datetime.datetime.now()
-    # classifying packets into TCP
-    if pkt.haslayer(TCP):
-        # classyfying packets into TCP Incoming packets
-        if socket.gethostbyname(socket.gethostname()) == pkt[IP].dst:
-            print(str("[") + str(time) + str("]") + "  " + "TCP-IN:{}".format(
-                len(pkt[TCP])) + " Bytes" + "    " + "SRC-MAC:" + str(pkt.src) + "    " + "DST-MAC:" + str(
-                pkt.dst) + "    " + "SRC-PORT:" + str(pkt.sport) + "    " + "DST-PORT:" + str(
-                pkt.dport) + "    " + "SRC-IP:" + str(pkt[IP].src) + "    " + "DST-IP:" + str(pkt[IP].dst))
+Route_details = Router_Packet_details
 
-        if socket.gethostbyname(socket.gethostname()) == pkt[IP].src:
-            print(str("[") + str(time) + str("]") + "  " + "TCP-OUT:{}".format(
-                len(pkt[TCP])) + " Bytes" + "    " + "SRC-MAC:" + str(pkt.src) + "    " + "DST-MAC:" + str(
-                pkt.dst) + "    " + "SRC-PORT:" + str(pkt.sport) + "    " + "DST-PORT:" + str(
-                pkt.dport) + "    " + "SRC-IP:" + str(pkt[IP].src) + "    " + "DST-IP:" + str(pkt[IP].dst))
-    # classifying packets into UDP
-    if pkt.haslayer(UDP):
-        if socket.gethostbyname(socket.gethostname()) == pkt[IP].src:
-            # classyfying packets into UDP Outgoing packets
-            print(str("[") + str(time) + str("]") + "  " + "UDP-OUT:{}".format(
-                len(pkt[UDP])) + " Bytes " + "    " + "SRC-MAC:" + str(pkt.src) + "    " + "DST-MAC:" + str(
-                pkt.dst) + "    " + "SRC-PORT:" + str(pkt.sport) + "    " + "DST-PORT:" + str(
-                pkt.dport) + "    " + "SRC-IP:" + str(pkt[IP].src) + "    " + "DST-IP:" + str(pkt[IP].dst))
+Thread1 = Thread(target=Route_details.get_packet_details)
 
-        if socket.gethostbyname(socket.gethostname()) == pkt[IP].dst:
-            # classyfying packets into UDP Incoming packets
-            print(str("[") + str(time) + str("]") + "  " + "UDP-IN:{}".format(
-                len(pkt[UDP])) + " Bytes " + "    " + "SRC-MAC:" + str(pkt.src) + "    " + "DST-MAC:" + str(
-                pkt.dst) + "    " + "SRC-PORT:" + str(pkt.sport) + "    " + "DST-PORT:" + str(
-                pkt.dport) + "    " + "SRC-IP:" + str(pkt[IP].src) + "    " + "DST-IP:" + str(pkt[IP].dst))
-    # classifying packets into ICMP
-    if pkt.haslayer(ICMP):
-        # classyfying packets into UDP Incoming packets
-        if socket.gethostbyname(socket.gethostname()) == pkt[IP].src:
-            print(str("[") + str(time) + str("]") + "  " + "ICMP-OUT:{}".format(
-                len(pkt[ICMP])) + " Bytes" + "    " + "IP-Version:" + str(
-                pkt[IP].version) + "    " * 1 + " SRC-MAC:" + str(pkt.src) + "    " + "DST-MAC:" + str(
-                pkt.dst) + "    " + "SRC-IP: " + str(pkt[IP].src) + "    " + "DST-IP:  " + str(pkt[IP].dst))
+Thread2 = Thread(target=Route_details.get_packet_details)
 
-        if socket.gethostbyname(socket.gethostname()) == pkt[IP].dst:
-            print(str("[") + str(time) + str("]") + "  " + "ICMP-IN:{}".format(
-                len(pkt[ICMP])) + " Bytes" + "    " + "IP-Version:" + str(
-                pkt[IP].version) + "    " * 1 + "	 SRC-MAC:" + str(pkt.src) + "    " + "DST-MAC:" + str(
-                pkt.dst) + "    " + "SRC-IP: " + str(pkt[IP].src) + "    " + "DST-IP:  " + str(pkt[IP].dst))
+Thread1.start()
 
+Thread2.start()
 
-if '__name__' == '_main_':
-    sniff(prn=network_monitoring_for_visualization_version)
+Thread1.join()
+
+Thread2.join()
+# io_bytes=psutil.net_io_counters()
+# print(io_bytes)

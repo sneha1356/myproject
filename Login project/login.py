@@ -11,11 +11,15 @@ class Login_Page():
         self.user1=username.get()
         self.passw1=password.get()
         self.con_pass=confirm_password.get()
-        if self.passw1==self.con_pass:
-            self.db_obj.insert_db(self.user1,self.passw1)
-            messagebox.showinfo('Message','successfully signin go and login')
+        result=self.db_obj.check_User(self.user1)
+        if result:
+            messagebox.showinfo('Message','This username already existed')
         else:
-            messagebox.showerror('error','must match password and confirm password')
+            if self.passw1==self.con_pass:
+                self.db_obj.insert_db(self.user1,self.passw1)
+                messagebox.showinfo('Message','successfully signin go and login')
+            else:
+                messagebox.showerror('error','must match password and confirm password')
     def sign_Up(self):
         global window2
         window2 = Toplevel(window)
@@ -35,7 +39,6 @@ class Login_Page():
         Label(window2, text="conf_passwd *").place(x=10, y=140)
         Entry(window2, textvariable=confirm_password, show='*').place(x=100, y=142)
         button = Button(window2, text='signup', command=self.check).place(x=140, y=180)
-        # button1=Button(window1,text='register',command=newUser)
         window2.mainloop()
 
     def validateLogin(self):
@@ -45,15 +48,18 @@ class Login_Page():
         if result:
             messagebox.showinfo('Message','Login Success')
         else:
-            messagebox.showerror('Error','go and signup')
+            messagebox.showerror('Error',' you are not register please go and signup')
     def serach_Db(self):
         self.user = Userid.get()
         result = self.db_obj.search(int(self.user))
-        d={}
-        r1=list(result)
-        d['username']=r1[1]
-        d['password']=r1[2]
-        messagebox.showinfo('Details',d)
+        if result!=None:
+            d={}
+            r1=list(result)
+            d['username']=r1[1]
+            d['password']=r1[2]
+            messagebox.showinfo('Details',d)
+        else:
+            messagebox.showinfo('Message','User not existed with that number')
 
 
     def search_window(self):
@@ -98,12 +104,6 @@ class Login_Page():
         window=Tk()
         window.geometry("500x500")
         window.title("Hcl Emp System")
-        # frame=Frame(window,width=200,height=200)
-        # frame.pack()
-        # bgimg=tk.PhotoImage(file="/home/siri/Documents/Login project/index1.png")
-        # img=bgimg.resize((450,350))
-        # limg=Label(window,i=bgimg)
-        # limg.pack()
         image=Image.open("/home/siri/Documents/project/index1.png")
         img=image.resize((550,500))
         my_img=ImageTk.PhotoImage(img)

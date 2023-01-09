@@ -15,7 +15,7 @@ class Bandwidth:
     while True:
         bytes_sent=psutil.net_io_counters().bytes_sent
         bytes_recv=psutil.net_io_counters().bytes_recv
-        print(bytes_sent,bytes_recv)
+        #print(bytes_sent,bytes_recv)
         total_bytes1=bytes_sent+bytes_recv
         new_sent=bytes_sent-sent_bytes
         new_recv=bytes_recv-rcv_bytes
@@ -39,6 +39,6 @@ class Bandwidth:
         time.sleep(1)
         # sns.lineplot(data=df)
         # plt.show()
-        print(df)
+        #print(df)
 bandwidth=Bandwidth()
 bandwidth()
